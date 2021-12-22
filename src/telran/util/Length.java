@@ -1,22 +1,30 @@
 package telran.util;
 
 public class Length implements Comparable<Length> {
-	float amount;
-	LengthUnit unit;
+	private final float amount;
+	private final LengthUnit unit;
+	
+	public Length(float amount, LengthUnit unit) {
+		this.amount = amount;
+		this.unit = unit;
+	}
+
 	@Override
 	/**
 	 * equals two Length objects according to LengthUnit
 	 * 10m == 10000mm
 	 */
 	public boolean equals(Object obj) {
-		//TODO
-		return false;
+		Length objLength = ((Length) obj).convert(unit);
+		
+		
+		return Float.compare(amount, objLength.amount) == 0;
 	}
 
 	@Override
 	public int compareTo(Length o) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return Float.compare(amount, o.convert(unit).amount);
 	}
 	/**
 	 * 
@@ -25,8 +33,8 @@ public class Length implements Comparable<Length> {
 	 * convert(LengthUnit.M) returns Length in meters 
 	 */
 	public Length convert(LengthUnit unit) {
-		//TODO
-		return null;
+		
+		return new Length(amount * this.unit.getValue() / unit.getValue(), unit);
 	}
 	@Override
 	/**
@@ -34,8 +42,19 @@ public class Length implements Comparable<Length> {
 	 * Example: 20M (string expression of Length object designed 20 meters)
 	 */
 	public String toString() {
-		//TODO
-		return "";
+		String amountStr = Float.toString(amount);
+		if (amountStr.endsWith(".0")) {
+			amountStr = amountStr.replaceAll("\\.0", "");
+		}
+		return amountStr + unit.toString();
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public LengthUnit getUnit() {
+		return unit;
 	}
 	
 	
